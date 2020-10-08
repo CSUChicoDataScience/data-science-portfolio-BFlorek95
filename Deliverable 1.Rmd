@@ -1,0 +1,111 @@
+---
+title: "Deliverable 1"
+output:
+  html_document:
+    df_print: paged
+---
+
+```{r echo = FALSE, include = FALSE}
+df <- read.csv("DelayedFlights.csv")
+library(ggplot2)
+```
+# Introduction:
+  My choice in data has to do with flight delays. I have personally been on many flights that alwasy seem to have some sort of delay. One of the craziest delays pertained to a simple light that had gone out which caused us to completely de-plane and took hours to find a new plane. \n
+
+
+
+# Data Set Info:
+  This dataset is on the flight delays in the year 2008. This dataset includes the exact departure times along with the schedule departure times. There is also listings of delays or cancellations allowing me to analyze the average departure time per airport. \n
+  
+# Data Set Variables/Units
+Year: 2008\n
+Month: 1 - 12\n
+DayofMonth: 1 - x (x = number of days in month)\n
+DayofWeek: 1 - 7 (1 = Monday, 7 = Sunday)\n
+DepTime: Exact departure time in format HHMM.SS (H = hour, M = minutes, S = seconds)\n
+CRSDepTime: The scheduled departure time in format HHMM.SS (H = hour, M = minutes, S = seconds)\n
+ArrTime: The exact Arrival time in format HHMM.SS (H = hour, M = minutes, S = seconds)\n
+CRSArrTime: The scheduled Arrival time in format HHMM.SS (H = hour, M = minutes, S = seconds)\n
+UniqueCarrier: The Carrier code for flight company. (EX AA = American Airlines)\n
+FlightNum: Flight Number\n
+TailNum: Tail Number\n
+ActualElapsedTime: Exact Flight time in minutes \n
+CRSElapsedTime: The scheduled or estimated flight time in minutes\n
+AirTime: Time in air in minutes\n
+ArrDelay: The arrival delay in minutes.\n
+DepDelay: The Departure delay in minutes.\n
+Origin: IATA code for origin airport\n
+Dest: IATA code for destination airport\n
+Distance: Flight distance in miles\n
+TaxiIn: Time to taxi to gate. Represented in minutes\n
+TaxiOut: Time to taxin to runway. Represented in minutes\n
+Cancelled: 0 = NO 1 = YES\n
+CancellationCode: Cancellation Reason A = Carrier, B = weather, C = NAS(National Airspace System), D = security\n
+Diverted: 0 = NO, 1 = YES\n
+CarrierDelay: Represented in minutes (Delay ex: bird strike, baggage loading)\n
+WeatherDelay: Represented in minutes (Delay ex: snow storm, de-icing)\n
+NASDelay: Represented in minutes (Delay ex: Airport operations, heavy traffic)\n
+SecurityDelay: Represented in minutes (Delay ex:Passenger screening)\n
+LateAircraftDelay: Represented in minutes (Delay ex: head wind)\n
+
+# Data Science Questions Trying to be answered:
+1. Can we predict and shorten package delivery times by looking at days with bad weather?
+2. Can we shorten our delays by changing the type of aircraft at a given airport? * need airline to aircraft to delays
+3. Can we improve delays by increasing the fleet size? **
+4. Can a specific aircraft perform better over time in a different environment?
+5. Can the weather have any adverse effects on airline cancellations?\n
+
+6. Can we predict and shorten delay times by changing airlines at specific airports.
+
+```{r}
+summary(df)
+```
+
+
+## Arrival delay vs Departure Delay per airport
+The below graph shows the Arrival Delay and departure delays with each dot representing a different airport.\n
+One thing to notice is the dots around the 2500 mark. Being that these numbers are representing minutes delayed this is rather High at that specific airport. Each color represents a different airport\n
+
+```{r}
+ ggplot(data = df, aes(x = DepDelay, y = ArrDelay)) +
+  geom_point(aes(color = Dest), show.legend = FALSE) +
+  labs(title = "Airports Arrival and Departure delays", x = "Departure Delays", y = "Arrival Delays")
+
+```
+
+# Sumary of Delays data
+Looking at the summarry below some interesting things to note are the negative values shown. At first glance this seems incorrect but after looking more indepth these negative values in the delay columns are simply saying that the airplane is actually ahead of schedule either due to every passenger boarding early, or something simple like a tailwind during the flight.
+```{r}
+summary(df$ArrDelay)
+```
+
+
+# Cancelled flights Per Origin Airport
+Below is
+```{r}
+ ggplot(data = df, aes(y = Dest, x = UniqueCarrier)) +
+  geom_point(aes(color = Cancelled), show.legend = FALSE)
+```
+
+# Carrier Delays Per Airline
+As you can see below are the Carrier Cause delays. The Delays are all colored by Origin airport suggesting that most of these delays have to do with either some sort of flight clearance or gate clearance. One interesting thing to lookat is how Northwest airlines seems to have a rather high carrier delay with American Airlines and American Eagle airlines following closly behind.
+
+```{r}
+ggplot(data = df, aes(x = UniqueCarrier, y = CarrierDelay)) +
+  geom_point(aes(color = Origin), show.legend = FALSE)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
